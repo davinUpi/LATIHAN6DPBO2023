@@ -4,6 +4,8 @@
  */
 package synchronization;
 
+import static java.lang.Math.abs;
+
 /**
  *
  * @author User
@@ -11,7 +13,7 @@ package synchronization;
 
 
 
-public class CollisionBox {
+public final class CollisionBox {
     
     private Min min;
     private Max max;
@@ -24,6 +26,11 @@ public class CollisionBox {
             this.x = x;
             this.y = y;
         }
+        
+        public void transpose(int x, int y){
+            this.x += x;
+            this.y += y;
+        }
 
     }
     
@@ -34,6 +41,11 @@ public class CollisionBox {
         public Max(int x, int y){
             this.x = x;
             this.y = y;
+        }
+        
+        public void transpose(int x, int y){
+            this.x += x;
+            this.y += y;
         }
     }
     
@@ -48,9 +60,20 @@ public class CollisionBox {
         
     }
     
-    public CollisionBox(int min_x, int min_y, int max_x, int max_y){
-        min = new Min(min_x, min_y);
-        max = new Max(max_x, max_y);
+    public CollisionBox(int x, int y, int width, int height){
+        min = new Min(0,0);
+        max = new Max(width, height);
+        transpose(x, y);
+    }
+    
+    public void setMin(int x, int y){
+        min.x = x;
+        min.y = y;
+    }
+    
+    public void setMax(int x, int y){
+        max.x=x;
+        max.y = y;
     }
     
     public Min getMin(){
@@ -61,10 +84,25 @@ public class CollisionBox {
         return max;
     }
     
-    public static boolean isCollision(CollisionBox box_a, CollisionBox box_b){
+    public int getWidth(){
+        return abs(max.x - min.x);
+    }
+    
+    public int getHeight(){
+        return abs(max.y - min.y);
+    }
+    
+    public void transpose(int x, int y){
+        min.transpose(x, y);
+        max.transpose(x, y);
+    }
+    
+    public class CollisionHandler{
+        public static boolean isCollision(CollisionBox box_a, CollisionBox box_b){
         return !(box_a.max.x < box_b.min.x || box_a.min.x > box_b.max.x ||
                 box_a.max.y < box_b.min.y || box_a.min.y > box_b.max.y
                 );
+    }
     }
     
 }

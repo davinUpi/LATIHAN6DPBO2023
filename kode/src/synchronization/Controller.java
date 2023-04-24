@@ -20,6 +20,7 @@ public class Controller extends KeyAdapter implements KeyListener
     
     private Game game;
     private Handler handler;
+    private MOVE move;
     
     /**
      * Constructor.
@@ -37,6 +38,15 @@ public class Controller extends KeyAdapter implements KeyListener
     {
         this.game = game;
         this.handler = handler;
+        move = MOVE.NONE;
+    }
+    
+    public enum MOVE{
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN,
+        NONE;
     }
     
     /**
@@ -97,29 +107,35 @@ public class Controller extends KeyAdapter implements KeyListener
             
             // Set the object and do the handling.
             GameObject temp = handler.get(i);
+            MOVE tempMove = MOVE.NONE;
             if((key == KeyEvent.VK_W) || (key == KeyEvent.VK_UP))
             {
                 // Move up.
                 temp.setVelY(-5);
-                game.addScore(+1);
+                tempMove = MOVE.UP;
             }
             if((key == KeyEvent.VK_A) || (key == KeyEvent.VK_LEFT))
             {
                 // Move left.
                 temp.setVelX(-5);
-                game.addScore(+1);
+                tempMove = MOVE.LEFT;
             }
             if((key == KeyEvent.VK_S) || (key == KeyEvent.VK_DOWN))
             {
                 // Move down.
                 temp.setVelY(+5);
-                game.addScore(+1);
+                tempMove = MOVE.DOWN;
             }
             if((key == KeyEvent.VK_D) || (key == KeyEvent.VK_RIGHT))
             {
                 // Move right.
                 temp.setVelX(+5);
-                game.addScore(+1);
+                tempMove = MOVE.RIGHT;
+            }
+            
+            if((move != tempMove) && (tempMove != MOVE.NONE)){
+                move = tempMove;
+                game.addScore(1);
             }
         }
     }
